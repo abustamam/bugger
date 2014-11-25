@@ -37,7 +37,7 @@ Enemy.prototype.render = function() {
 // a handleInput() method.
 
 var Player = function(x,y) {
-    this.sprite = 'images/char-boy.png';
+    this.sprite = 'images/char-horn-girl.png';
     this.x = x;
     this.y = y;
 }
@@ -53,21 +53,25 @@ Player.prototype.render = function() {
 Player.prototype.handleInput = function(key){
     switch(key) {
     case 'up':
+    case 'w':
         if (this.y > 0){
             this.y -= 83;
         }
         break;
     case 'down':
+    case 's':
         if (this.y < 404) {
             this.y += 83;
         }
         break;
     case 'left':
+    case 'a':
         if (this.x > 0) {
             this.x -= 101;
         }
         break;
     case 'right':
+    case 'd':
         if (this.x < 404){
             this.x += 101;
         }
@@ -95,7 +99,13 @@ document.addEventListener('keyup', function(e) {
         37: 'left',
         38: 'up',
         39: 'right',
-        40: 'down'
+        40: 'down',
+        87: 'w',
+        65: 'a',
+        83: 's',
+        68: 'd',
+        32: 'space',
+        13: 'enter'
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
