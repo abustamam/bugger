@@ -1,3 +1,8 @@
-body {
+h1 {
     text-align: center;
+}
+
+ul#controls {
+  list-style-type: none;
+  padding-left: 10px;
 }
