@@ -1,3 +1,30 @@
+// Grid system follows the same coordinate system computers use-- up-left is (0,0)
+// Sample map:
+
+//   0 1 2 3 4
+// 0 x x x x x
+// 1 x x x x x
+// 2 x x x x x
+// 3 x x x x x
+// 4 x x x x x
+// 5 x x x x x
+
+// Board class
+
+var Board = function() {
+    // map is an array containing the short-hand code for tiles
+    this.map = ["wwwwww",
+                "ssssss",
+                "sswwss",
+                "ggwwgg",
+                "gggggg",
+                "gggggg"];
+}
+
+Board.prototype.render = function(map) {
+    
+};
+
 // Enemies our player must avoid
 var Enemy = function(x,y) {
     // Variables applied to each of our instances go here,
@@ -9,8 +36,10 @@ var Enemy = function(x,y) {
 
     // generate random speed between 100 and 1000
     this.speed = Math.floor(Math.random()*(1000-100+1)+100);
-    this.x = x;
-    this.y = y;
+
+    // Utilize grid coords
+    this.x = x * 101;
+    this.y = y * 83 - 20;
 }
 
 // Update the enemy's position, required method for game
@@ -38,8 +67,8 @@ Enemy.prototype.render = function() {
 
 var Player = function(x,y) {
     this.sprite = 'images/char-horn-girl.png';
-    this.x = x;
-    this.y = y;
+    this.x = x * 101;
+    this.y = y * 83 - 20;
 }
 
 Player.prototype.update = function(dt) {
@@ -60,7 +89,7 @@ Player.prototype.handleInput = function(key){
         break;
     case 'down':
     case 's':
-        if (this.y < 404) {
+        if (this.y < 394) {
             this.y += 83;
         }
         break;
@@ -79,18 +108,44 @@ Player.prototype.handleInput = function(key){
     }
 }
 
+var Selector = function() {
+    this.sprite = 'images/Selector.png';
+    this.position = 0;
+
+}
+
+Selector.prototype.handleInput = function(key) {
+    switch(key) {
+    case 'left':
+    case 'a':
+        if (this.x > 0) {
+            this.x -= 101;
+        }
+        break;
+    case 'right':
+    case 'd':
+        if (this.x < 404){
+            this.x += 101;
+        }
+        break;
+    }
+};
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 
-var en = new Enemy(0,140);
+var en = new Enemy(0,2);
 
 var allEnemies = [
     en
 ];
 
-var player = new Player(202,404);
+var player = new Player(2,5);
 
+var board = new Board();
+
+var selector = new Selector();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -109,4 +164,5 @@ document.addEventListener('keyup', function(e) {
     };
 
     player.handleInput(allowedKeys[e.keyCode]);
+
 });

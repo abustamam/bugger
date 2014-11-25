@@ -107,12 +107,7 @@ var Engine = (function(global) {
         /* This array holds the short-hand code for how a level will look like
          * 
          */
-        var rowImages = ["wwwwww",
-                         "ssssss",
-                         "sswwss",
-                         "ggwwgg",
-                         "gggggg",
-                         "gggggg"],
+        var rowImages = board.map,
             numRows = rowImages.length,
             numCols = rowImages[0].length,
             row, col, img;
