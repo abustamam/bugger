@@ -54,6 +54,14 @@ Enemy.prototype.update = function(dt) {
     } else {
        this.x += dt * this.speed;
     }
+
+    if (!(this.x >= player.x + 101 ||
+          this.x + 101 < player.x  ||
+          this.y >= player.y + 83 ||
+          this.y + 83 < player.y)) {
+        // Collision detection
+    }
+
 }
 
 // Draw the enemy on the screen, required method for game
