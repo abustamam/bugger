@@ -23,6 +23,7 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
+        lvl = 0,
         lastTime;
 
     canvas.width = 505;
@@ -84,14 +85,14 @@ var Engine = (function(global) {
     }
 
     /* This is called by the update function  and loops through all of the
-     * objects within your allEnemies array as defined in app.js and calls
+     * objects within your level.enemies array as defined in app.js and calls
      * their update() methods. It will then call the update function for your
      * player object. These update methods should focus purely on updating
      * the data/properties related to  the object. Do your drawing in your
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
+        levels[lvl].enemies.forEach(function(enemy) {
             enemy.update(dt);
         });
         player.update();
@@ -104,10 +105,7 @@ var Engine = (function(global) {
      * they are just drawing the entire screen over and over.
      */
     function render() {
-        /* This array holds the short-hand code for how a level will look like
-         * 
-         */
-        var rowImages = board.map,
+        var rowImages = levels[lvl].map,
             numRows = rowImages.length,
             numCols = rowImages[0].length,
             row, col, img;
@@ -145,10 +143,10 @@ var Engine = (function(global) {
      * on your enemy and player entities within app.js
      */
     function renderEntities() {
-        /* Loop through all of the objects within the allEnemies array and call
+        /* Loop through all of the objects within the level.enemies array and call
          * the render function you have defined.
          */
-        allEnemies.forEach(function(enemy) {
+        levels[lvl].enemies.forEach(function(enemy) {
             enemy.render();
         });
 

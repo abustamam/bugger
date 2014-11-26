@@ -9,19 +9,58 @@
 // 4 x x x x x
 // 5 x x x x x
 
-// Board class
+// Game class
 
-var Board = function() {
+var Game = function() {
+    // The Game class contains vital information about the game, such as
+    // level number, number of lives, etc...
+
+    // It is also the way by which everything is initialized upon start, and upon
+    // reset (game over).
+
+    this.lives = 3;
+
+
+}
+
+// Level class
+
+var Level = function(num) {
+    // The Level class will contain information about the level, namely the 
+    // tiles used, number of enemies, size, items, etc...
+
+    // The num argument is how many enemies will be present, they will be 
+    // randomly generated on the screen
+
     // map is an array containing the short-hand code for tiles
     this.map = ["wwwwww",
                 "ssssss",
-                "sswwss",
-                "ggwwgg",
-                "gggggg",
+                "ssssss",
+                "ssssss",
+                "ssssss",
                 "gggggg"];
+
+    this.enemies = []
+
+    var i = 0;
+
+    // en is temp variable for storing enemies in the while loop
+
+    // locy is the random number generator, it will generate a number between
+    // the second-to-most top and second-to-most bottom tiles (to allow for
+    // the player to generate and the goal)
+
+    var en, locy;
+
+    while (i < num) {
+        locy = Math.floor(Math.random()*(this.map.length-2)+1);
+        en = new Enemy(0,locy);
+        this.enemies.push(en);
+        i++;
+    }
 }
 
-Board.prototype.render = function(map) {
+Level.prototype.render = function(map) {
     
 };
 
@@ -140,18 +179,14 @@ Selector.prototype.handleInput = function(key) {
 };
 
 // Now instantiate your objects.
-// Place all enemy objects in an array called allEnemies
-// Place the player object in a variable called player
-
-var en = new Enemy(0,2);
-
-var allEnemies = [
-    en
-];
 
 var player = new Player(2,5);
 
-var board = new Board();
+var level1 = new Level(1);
+var level2 = new Level(2);
+var level3 = new Level(3);
+
+var levels = [level1,level2,level3];
 
 var selector = new Selector();
 
