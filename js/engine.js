@@ -23,7 +23,6 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        lvl = 0,
         lastTime;
 
     canvas.width = 505;
@@ -92,10 +91,10 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        levels[lvl].enemies.forEach(function(enemy) {
+        game.levels[game.lvl].enemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update();
+        game.player.update();
     }
 
     /* This function initially draws the "game level", it will then call
@@ -105,52 +104,16 @@ var Engine = (function(global) {
      * they are just drawing the entire screen over and over.
      */
     function render() {
-        var rowImages = levels[lvl].map,
-            numRows = rowImages.length,
-            numCols = rowImages[0].length,
-            row, col, img;
+        game.levels[game.lvl].render();
 
-        /* Loop through the number of rows and columns we've defined above
-         * and, using the rowImages array, draw the correct image for that
-         * portion of the "grid"
-         */
-        for (row = 0; row < numRows; row++) {
-            for (col = 0; col < numCols; col++) {
-                /* The drawImage function of the canvas' context element
-                 * requires 3 parameters: the image to draw, the x coordinate
-                 * to start drawing and the y coordinate to start drawing.
-                 * We're using our Resources helpers to refer to our images
-                 * so that we get the benefits of caching these images, since
-                 * we're using them over and over.
-                 */
-                if (rowImages[row][col] === "w") {
-                    img = "images/water-block.png";
-                } else if (rowImages[row][col] === "s") {
-                    img = "images/stone-block.png";
-                } else if (rowImages[row][col] === "g") {
-                    img = "images/grass-block.png";
-                }
-                ctx.drawImage(Resources.get(img), col * 101, row * 83);
-            }
-        }
-
-
-        renderEntities();
-    }
-
-    /* This function is called by the render function and is called on each game
-     * tick. It's purpose is to then call the render functions you have defined
-     * on your enemy and player entities within app.js
-     */
-    function renderEntities() {
         /* Loop through all of the objects within the level.enemies array and call
          * the render function you have defined.
          */
-        levels[lvl].enemies.forEach(function(enemy) {
+        game.levels[game.lvl].enemies.forEach(function(enemy) {
             enemy.render();
         });
 
-        player.render();
+        game.player.render();
     }
 
     /* This function does nothing but it could have been a good place to

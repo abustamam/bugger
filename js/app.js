@@ -21,11 +21,35 @@ var Game = function() {
     this.lives = 3;
 
 
+    // Initialize levels
+    var level1 = new Level(1, ["wwwwww",
+                           "ssssss",
+                           "ssssss",
+                           "ssssss",
+                           "ssssss",
+                           "gggggg"]);
+    var level2 = new Level(2, ["wwwwww",
+                               "ssssss",
+                               "ssssss",
+                               "ssssss",
+                               "ssssss",
+                               "gggggg"]);
+    var level3 = new Level(3, ["wwwwww",
+                               "ssssss",
+                               "ssssss",
+                               "ssssss",
+                               "ssssss",
+                               "gggggg"]);
+    this.levels = [level1,level2,level3];
+
+    this.lvl = 0;
+
+    this.player = new Player(2,5);
 }
 
 // Level class
 
-var Level = function(num) {
+var Level = function(num, map) {
     // The Level class will contain information about the level, namely the 
     // tiles used, number of enemies, size, items, etc...
 
@@ -33,12 +57,7 @@ var Level = function(num) {
     // randomly generated on the screen
 
     // map is an array containing the short-hand code for tiles
-    this.map = ["wwwwww",
-                "ssssss",
-                "ssssss",
-                "ssssss",
-                "ssssss",
-                "gggggg"];
+    this.map = map;
 
     this.enemies = []
 
@@ -61,7 +80,34 @@ var Level = function(num) {
 }
 
 Level.prototype.render = function(map) {
-    
+        var rowImages = this.map,
+        numRows = rowImages.length,
+        numCols = rowImages[0].length,
+        row, col, img;
+
+        /* Loop through the number of rows and columns we've defined above
+         * and, using the rowImages array, draw the correct image for that
+         * portion of the "grid"
+         */
+        for (row = 0; row < numRows; row++) {
+            for (col = 0; col < numCols; col++) {
+                /* The drawImage function of the canvas' context element
+                 * requires 3 parameters: the image to draw, the x coordinate
+                 * to start drawing and the y coordinate to start drawing.
+                 * We're using our Resources helpers to refer to our images
+                 * so that we get the benefits of caching these images, since
+                 * we're using them over and over.
+                 */
+                if (rowImages[row][col] === "w") {
+                    img = "images/water-block.png";
+                } else if (rowImages[row][col] === "s") {
+                    img = "images/stone-block.png";
+                } else if (rowImages[row][col] === "g") {
+                    img = "images/grass-block.png";
+                }
+                ctx.drawImage(Resources.get(img), col * 101, row * 83);
+            }
+        }
 };
 
 // Enemies our player must avoid
@@ -77,8 +123,8 @@ var Enemy = function(x,y) {
     this.speed = Math.floor(Math.random()*(1000-100+1)+100);
 
     // Utilize grid coords
-    this.x = x * 101;
-    this.y = y * 83 - 20;
+    this.x = x;
+    this.y = y;
 }
 
 // Update the enemy's position, required method for game
@@ -88,16 +134,16 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
 
-    if (this.x > 505){
-        this.x = -101
+    if (this.x > 5){
+        this.x = -1
     } else {
-       this.x += dt * this.speed;
+       this.x += dt * this.speed / 101;
     }
 
-    if (!(this.x >= player.x + 101 ||
-          this.x + 101 < player.x  ||
-          this.y >= player.y + 83 ||
-          this.y + 83 < player.y)) {
+    if (!(this.x >= game.player.x + 1 ||
+          this.x + 1 < game.player.x  ||
+          this.y >= game.player.y + 1 ||
+          this.y + 1 < game.player.y)) {
         // Collision detection
     }
 
@@ -105,7 +151,7 @@ Enemy.prototype.update = function(dt) {
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83 - 20);
 }
 
 // Now write your own player class
@@ -114,16 +160,23 @@ Enemy.prototype.render = function() {
 
 var Player = function(x,y) {
     this.sprite = 'images/char-horn-girl.png';
-    this.x = x * 101;
-    this.y = y * 83 - 20;
+    this.x = x;
+    this.y = y;
 }
 
 Player.prototype.update = function(dt) {
+    // Check if player is drowning. It's important to note that 
+    // the map property of a level is row by column, not column by row,
+    // so coordinates are (y, x)
 
+    if (game.levels[game.lvl].map[this.y][this.x] === "w"){
+        // Drowning 
+        console.log("Drowning!");
+    }
 }
 
 Player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83 - 20);
 }
 
 Player.prototype.handleInput = function(key){
@@ -131,25 +184,25 @@ Player.prototype.handleInput = function(key){
     case 'up':
     case 'w':
         if (this.y > 0){
-            this.y -= 83;
+            this.y -= 1;
         }
         break;
     case 'down':
     case 's':
-        if (this.y < 394) {
-            this.y += 83;
+        if (this.y < 5) {
+            this.y += 1;
         }
         break;
     case 'left':
     case 'a':
         if (this.x > 0) {
-            this.x -= 101;
+            this.x -= 1;
         }
         break;
     case 'right':
     case 'd':
-        if (this.x < 404){
-            this.x += 101;
+        if (this.x < 4){
+            this.x += 1;
         }
         break;
     }
@@ -166,13 +219,13 @@ Selector.prototype.handleInput = function(key) {
     case 'left':
     case 'a':
         if (this.x > 0) {
-            this.x -= 101;
+            this.x -= 1;
         }
         break;
     case 'right':
     case 'd':
-        if (this.x < 404){
-            this.x += 101;
+        if (this.x < 4){
+            this.x += 1;
         }
         break;
     }
@@ -180,15 +233,13 @@ Selector.prototype.handleInput = function(key) {
 
 // Now instantiate your objects.
 
-var player = new Player(2,5);
+//var player = new Player(2,5);
 
-var level1 = new Level(1);
-var level2 = new Level(2);
-var level3 = new Level(3);
-
-var levels = [level1,level2,level3];
+//var levels = [level1,level2,level3];
 
 var selector = new Selector();
+
+var game = new Game();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -206,6 +257,6 @@ document.addEventListener('keyup', function(e) {
         13: 'enter'
     };
 
-    player.handleInput(allowedKeys[e.keyCode]);
+    game.player.handleInput(allowedKeys[e.keyCode]);
 
 });
