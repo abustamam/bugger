@@ -9,6 +9,9 @@
 // 4 x x x x x
 // 5 x x x x x
 
+// Since tiles are 101 x 83 px, entities' coords will be multiplied as such, with an offset to account for 
+// the 3d box shadow below each tile
+
 // Game class
 
 var Game = function() {
@@ -22,24 +25,24 @@ var Game = function() {
 
 
     // Initialize levels
-    var level1 = new Level(1, ["wwwwww",
-                           "ssssss",
-                           "ssssss",
-                           "ssssss",
-                           "ssssss",
-                           "gggggg"]);
-    var level2 = new Level(2, ["wwwwww",
-                               "ssssss",
-                               "ssssss",
-                               "ssssss",
-                               "ssssss",
-                               "gggggg"]);
-    var level3 = new Level(3, ["wwwwww",
-                               "ssssss",
-                               "ssssss",
-                               "ssssss",
-                               "ssssss",
-                               "gggggg"]);
+    var level1 = new Level(1, ["wgggw",
+                               "sssss",
+                               "sssss",
+                               "sssss",
+                               "sssss",
+                               "ggggg"]);
+    var level2 = new Level(2, ["wgggw",
+                               "sssss",
+                               "sssss",
+                               "sssss",
+                               "sssss",
+                               "ggggg"]);
+    var level3 = new Level(3, ["wgggw",
+                               "sssss",
+                               "sssss",
+                               "sssss",
+                               "sssss",
+                               "ggggg"]);
     this.levels = [level1,level2,level3];
 
     this.lvl = 0;
@@ -67,7 +70,7 @@ var Level = function(num, map) {
 
     // locy is the random number generator, it will generate a number between
     // the second-to-most top and second-to-most bottom tiles (to allow for
-    // the player to generate and the goal)
+    // the player and the goal to generate)
 
     var en, locy;
 
@@ -108,6 +111,11 @@ Level.prototype.render = function(map) {
                 ctx.drawImage(Resources.get(img), col * 101, row * 83);
             }
         }
+
+        // Draw the dude in distress and his attackers! 
+        ctx.drawImage(Resources.get("images/enemy-bug.png"), 1 * 101, 0 * 83 - 20);
+        ctx.drawImage(Resources.get("images/enemy-bug-flipped.png"), 3 * 101, 0 * 83 - 20);
+        ctx.drawImage(Resources.get("images/char-boy.png"), 2 * 101, 0 * 83 - 20);
 };
 
 // Enemies our player must avoid
