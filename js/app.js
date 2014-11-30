@@ -25,19 +25,22 @@ var Game = function() {
 
 
     // Initialize levels
-    var level1 = new Level(1, ["wgggw",
+    var level1 = new Level(1, [4],
+                              ["wgggw",
                                "sssss",
                                "sssss",
                                "sssss",
                                "sssss",
                                "ggggg"]);
-    var level2 = new Level(2, ["wgggw",
+    var level2 = new Level(2, [3,2],
+                              ["wgggw",
                                "sssss",
                                "sssss",
                                "sssss",
                                "sssss",
                                "ggggg"]);
-    var level3 = new Level(3, ["wgggw",
+    var level3 = new Level(3, [1,2,3],
+                              ["wgggw",
                                "sssss",
                                "sssss",
                                "sssss",
@@ -50,14 +53,25 @@ var Game = function() {
     this.player = new Player(2,5);
 }
 
+Game.prototype.reset = function() {
+    this.player.x = 2;
+    this.player.y = 5;
+    this.lives--;
+
+    if (this.lives === 0) {
+
+    }
+};
+
 // Level class
 
-var Level = function(num, map) {
+var Level = function(num, loc, map) {
     // The Level class will contain information about the level, namely the 
     // tiles used, number of enemies, size, items, etc...
 
-    // The num argument is how many enemies will be present, they will be 
-    // randomly generated on the screen
+    // The num argument is how many enemies will be present
+
+    // The loc argument is an array of y-coordinates of the enemy(ies)
 
     // map is an array containing the short-hand code for tiles
     this.map = map;
@@ -68,15 +82,10 @@ var Level = function(num, map) {
 
     // en is temp variable for storing enemies in the while loop
 
-    // locy is the random number generator, it will generate a number between
-    // the second-to-most top and second-to-most bottom tiles (to allow for
-    // the player and the goal to generate)
-
-    var en, locy;
+    var en;
 
     while (i < num) {
-        locy = Math.floor(Math.random()*(this.map.length-2)+1);
-        en = new Enemy(0,locy);
+        en = new Enemy(0,loc);
         this.enemies.push(en);
         i++;
     }
@@ -114,8 +123,8 @@ Level.prototype.render = function(map) {
 
         // Draw the dude in distress and his attackers! 
         ctx.drawImage(Resources.get("images/enemy-bug.png"), 1 * 101, 0 * 83 - 20);
-        ctx.drawImage(Resources.get("images/enemy-bug-flipped.png"), 3 * 101, 0 * 83 - 20);
         ctx.drawImage(Resources.get("images/char-boy.png"), 2 * 101, 0 * 83 - 20);
+        ctx.drawImage(Resources.get("images/enemy-bug-flipped.png"), 3 * 101, 0 * 83 - 20);
 };
 
 // Enemies our player must avoid
@@ -148,11 +157,13 @@ Enemy.prototype.update = function(dt) {
        this.x += dt * this.speed / 101;
     }
 
+    // Using box method for collision detection
+
     if (!(this.x >= game.player.x + 1 ||
           this.x + 1 < game.player.x  ||
           this.y >= game.player.y + 1 ||
           this.y + 1 < game.player.y)) {
-        // Collision detection
+        game.reset();
     }
 
 }
@@ -179,7 +190,7 @@ Player.prototype.update = function(dt) {
 
     if (game.levels[game.lvl].map[this.y][this.x] === "w"){
         // Drowning 
-        console.log("Drowning!");
+        game.reset();
     }
 }
 
@@ -219,7 +230,12 @@ Player.prototype.handleInput = function(key){
 var Selector = function() {
     this.sprite = 'images/Selector.png';
     this.position = 0;
-
+    this.characters = [
+        {name: "cat-girl", sprite: "images/char-cat-girl.png"},
+        {name: "horn-girl", sprite: "images/char-horn-girl.png"},
+        {name: "pink-girl", sprite: "images/char-pink-girl.png"},
+        {name: "princess-girl", sprite: "images/char-princess-girl.png"}
+    ];
 }
 
 Selector.prototype.handleInput = function(key) {
