@@ -6,3 +6,19 @@ ul#controls {
   list-style-type: none;
   padding-left: 10px;
 }
+
+#stats #game-area #game-over {
+  display: none;
+}
+
+#play-area {
+  position: relative;
+}
+
+#start-game {
+  text-align: center;
+  width: 100%;
+  position: absolute;
+  top: 50%;
+  margin: 0 auto;
+}

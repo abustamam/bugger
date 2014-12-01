@@ -66,7 +66,14 @@ var Engine = (function(global) {
     function init() {
         reset();
         lastTime = Date.now();
-        main();
+        $("#start").click(function () {
+            $("#start-game").css('display', 'none');
+            $("#stats").css("display", 'block');
+            main();
+            $("#game-area").css("display", 'block');
+            main();
+        })
+        //main();
     }
 
     /* This function is called by main (our game loop) and itself calls all
