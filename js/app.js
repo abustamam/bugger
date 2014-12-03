@@ -162,8 +162,7 @@ Enemy.prototype.update = function(dt) {
     if (!(this.x >= game.player.x + 1 ||
           this.x + 1 < game.player.x  ||
           this.y >= game.player.y + 1 ||
-          this.y + 1 < game.player.y)) {
-        console.log(this.x + " " game.player.x);
+          this.y < game.player.y)) {
         game.reset();
     }
 
