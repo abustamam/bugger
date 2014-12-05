@@ -23,6 +23,7 @@ var Game = function() {
 
     this.lives = 3;
 
+    this.lvl = 0;
 
     // Initialize levels
     var level1 = new Level(1, [4],
@@ -48,8 +49,6 @@ var Game = function() {
                                "ggggg"]);
     this.levels = [level1,level2,level3];
 
-    this.lvl = 0;
-
     this.player = new Player(2,5);
 }
 
@@ -59,8 +58,18 @@ Game.prototype.reset = function() {
     this.lives--;
 
     if (this.lives === 0) {
-
+        $("#stats").css("display", 'none');
+        $("#game-area").css("display", 'none');
+        $("#game-over").css('display', 'block');
     }
+};
+
+Game.prototype.resetGame = function() {
+    game = new Game();
+}
+
+Game.prototype.gameOver = function() {
+    
 };
 
 // Level class

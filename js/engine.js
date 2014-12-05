@@ -66,14 +66,14 @@ var Engine = (function(global) {
     function init() {
         reset();
         lastTime = Date.now();
-        $("#start").click(function () {
+        $(".start").click(function () {
             $("#start-game").css('display', 'none');
+            $("#game-over").css('display', 'none');
             $("#stats").css("display", 'block');
-            main();
             $("#game-area").css("display", 'block');
+            game.resetGame();
             main();
-        })
-        //main();
+        });
     }
 
     /* This function is called by main (our game loop) and itself calls all
@@ -87,6 +87,9 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
+
+        $("#lives").text(game.lives);
+        $("#level").text(game.lvl);
         // checkCollisions();
     }
 

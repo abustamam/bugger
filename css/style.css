@@ -7,18 +7,25 @@ ul#controls {
   padding-left: 10px;
 }
 
-#stats #game-area #game-over {
+#stats, #game-over, #game-area, #stats {
   display: none;
 }
 
 #play-area {
   position: relative;
+  min-height: 400px;
 }
 
-#start-game {
+#start-game, #game-over {
   text-align: center;
   width: 100%;
   position: absolute;
   top: 50%;
+  margin: 0 auto;
+}
+
+#game-area, #stats {
+  text-align: center;
+  width: 100%;
   margin: 0 auto;
 }
