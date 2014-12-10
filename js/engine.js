@@ -32,6 +32,7 @@ var Engine = (function(global) {
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
      */
+
     function main() {
         /* Get our time delta information which is required if your game
          * requires smooth animation. Because everyone's computer processes
@@ -87,10 +88,10 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-
+    
+        // Display status text
         $("#lives").text(game.lives);
-        $("#level").text(game.lvl);
-        // checkCollisions();
+        $("#level").text(game.lvl + 1);
     }
 
     /* This is called by the update function  and loops through all of the
@@ -101,10 +102,16 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        game.levels[game.lvl].enemies.forEach(function(enemy) {
-            enemy.update(dt);
-        });
-        game.player.update();
+        if (game.state === "game") {
+            game.levels[game.lvl].enemies.forEach(function(enemy) {
+                enemy.update(dt);
+            });
+            game.player.update();
+        }
+
+        else if (game.state === "start") {
+            game.selector.update();
+        }
     }
 
     /* This function initially draws the "game level", it will then call
@@ -114,16 +121,40 @@ var Engine = (function(global) {
      * they are just drawing the entire screen over and over.
      */
     function render() {
-        game.levels[game.lvl].render();
+        if (game.state === "game"){
+            game.levels[game.lvl].render();
 
-        /* Loop through all of the objects within the level.enemies array and call
-         * the render function you have defined.
-         */
-        game.levels[game.lvl].enemies.forEach(function(enemy) {
-            enemy.render();
-        });
+            /* Loop through all of the objects within the level.enemies array and call
+             * the render function you have defined.
+             */
+            game.levels[game.lvl].enemies.forEach(function(enemy) {
+                enemy.render();
+            });
 
-        game.player.render();
+            game.player.render();
+        }
+
+        else if (game.state === "start") {
+
+            // Draw background rectangle
+            ctx.beginPath();
+            ctx.rect(0, 0, 505, 606);
+            ctx.fillStyle = 'white';
+            ctx.fill();
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = 'black';
+            ctx.stroke();
+
+            // Draw Selector
+            game.selector.render();
+
+            // Draw characters
+            var i = 0;
+            var chr = game.selector.characters;
+            for (i = 0; i < chr.length; i++) {
+                ctx.drawImage(Resources.get(chr[i]['sprite']), i * 101 + 50, 3 * 83 - 20);
+            }
+        }
     }
 
     /* This function does nothing but it could have been a good place to
@@ -145,7 +176,11 @@ var Engine = (function(global) {
         'images/enemy-bug.png',
         'images/char-boy.png',
         'images/char-horn-girl.png',
-        'images/enemy-bug-flipped.png'
+        'images/char-cat-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
+        'images/enemy-bug-flipped.png',
+        'images/Selector.png'
     ]);
     Resources.onReady(init);
 

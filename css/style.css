@@ -7,7 +7,7 @@ ul#controls {
   padding-left: 10px;
 }
 
-#stats, #game-over, #game-area, #stats {
+#stats, #game-over, #stats {
   display: none;
 }
 

@@ -21,6 +21,8 @@ var Game = function() {
     // It is also the way by which everything is initialized upon start, and upon
     // reset (game over).
 
+    this.state = "start";
+
     this.lives = 3;
 
     this.lvl = 0;
@@ -50,6 +52,8 @@ var Game = function() {
     this.levels = [level1,level2,level3];
 
     this.player = new Player(2,5);
+
+    this.selector = new Selector();
 }
 
 Game.prototype.reset = function() {
@@ -245,32 +249,39 @@ var Selector = function() {
         {name: "pink-girl", sprite: "images/char-pink-girl.png"},
         {name: "princess-girl", sprite: "images/char-princess-girl.png"}
     ];
+    this.y = 3;
 }
+
+Selector.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.position * 101 + 50, this.y * 83 - 20);
+};
 
 Selector.prototype.handleInput = function(key) {
     switch(key) {
     case 'left':
     case 'a':
-        if (this.x > 0) {
-            this.x -= 1;
+        if (this.position > 0) {
+            this.position -= 1;
         }
         break;
     case 'right':
     case 'd':
-        if (this.x < 4){
-            this.x += 1;
+        if (this.position < 3){
+            this.position += 1;
         }
+        break;
+    case 'space':
+        game.player.sprite = this.characters[this.position]['sprite'];
+        game.state = "game";
         break;
     }
 };
 
+Selector.prototype.update = function() {
+    
+};
+
 // Now instantiate your objects.
-
-//var player = new Player(2,5);
-
-//var levels = [level1,level2,level3];
-
-var selector = new Selector();
 
 var game = new Game();
 
@@ -291,5 +302,6 @@ document.addEventListener('keyup', function(e) {
     };
 
     game.player.handleInput(allowedKeys[e.keyCode]);
+    game.selector.handleInput(allowedKeys[e.keyCode]);
 
 });
