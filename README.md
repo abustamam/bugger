@@ -20,10 +20,11 @@ Simply type `python -m SimpleHTTPServer` and it should work. Please refer to the
 
 This project was created with the help of students and staff on the Piazza forums, as well as the following websites:
 
-Primer on object oriented JS: https://www.udacity.com/course/viewer#!/c-ud015
-Tutorial on Canvas: https://www.udacity.com/course/viewer#!/c-ud292
-Primer on making games: http://jlongster.com/Making-Sprite-based-Games-with-Canvas
-Additional resource on games: http://www.lostdecadegames.com/how-to-make-a-simple-html5-canvas-game/
-Inspiration for style: https://github.com/ftchirou/frontend-nanodegree-arcade-game/ 
-HTML and JS reference: https://www.w3schools.com/
+-Assets and basic engine: https://github.com/udacity/frontend-nanodegree-arcade-game
+-Primer on object oriented JS: https://www.udacity.com/course/viewer#!/c-ud015
+-Tutorial on Canvas: https://www.udacity.com/course/viewer#!/c-ud292
+-Primer on making games: http://jlongster.com/Making-Sprite-based-Games-with-Canvas
+-Additional resource on games: http://www.lostdecadegames.com/how-to-make-a-simple-html5-canvas-game/
+-Inspiration for style: https://github.com/ftchirou/frontend-nanodegree-arcade-game/ 
+-HTML and JS reference: https://www.w3schools.com/
 
