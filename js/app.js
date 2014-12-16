@@ -76,9 +76,7 @@ Game.prototype.resetGame = function() {
 }
 
 Game.prototype.gameOver = function() {
-    $("#stats").css("display", 'none');
-    $("#game-area").css("display", 'none');
-    $("#game-over").css('display', 'block');
+    this.state = "over";
 };
 
 Game.prototype.nextLevel = function() {
@@ -88,6 +86,14 @@ Game.prototype.nextLevel = function() {
     }
     else {
         game.state = "win";
+    }
+};
+
+Game.prototype.handleInput = function(key) {
+    switch(key){
+    case "space":
+    case "enter":
+        this.resetGame();
     }
 };
 
@@ -319,7 +325,15 @@ document.addEventListener('keyup', function(e) {
         13: 'enter'
     };
 
-    game.player.handleInput(allowedKeys[e.keyCode]);
-    game.selector.handleInput(allowedKeys[e.keyCode]);
+    if (game.state === "start") {
+        game.selector.handleInput(allowedKeys[e.keyCode]);
+    }
+    else if (game.state === "game") {
+        game.player.handleInput(allowedKeys[e.keyCode]);
+    }
+
+    else if (game.state === "win" || game.state === "over") {
+        game.handleInput(allowedKeys[e.keyCode]);
+    }
 
 });

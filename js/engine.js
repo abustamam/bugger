@@ -136,7 +136,7 @@ var Engine = (function(global) {
             ctx.fillText("Lives: " + game.lives, 125, 37);
             ctx.fillText("Level: " + game.lvl + 1, 375, 37);
             break;
-            
+
         case "start":
             // Draw Selector
             game.selector.render();
@@ -167,9 +167,13 @@ var Engine = (function(global) {
             ctx.textAlign = 'center';
             ctx.fillStyle = "black";
             ctx.fillText('You Win!', 252, 100);
+            ctx.font = 'bold 14pt Calibri';
+            ctx.fillText('Press Space or Enter to Restart', 252, 160);
             break;
 
         case "over":
+
+
             ctx.font = 'bold 20pt Calibri';
             ctx.textAlign = 'center';
             ctx.fillStyle = "black";
