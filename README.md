@@ -1,7 +1,7 @@
 BUGGER
 ======
 
-Students should use this rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797 
+Students should use [this rubric](https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797) 
 for self-checking their submission.
 
 # Bugger
@@ -10,7 +10,7 @@ This is a game created for the Frontend Nanodegree project #3.
 
 ## How to play
 
-The easiest way to play is by going to the pushed (website)[abustamam.github.io/frontend-nanodegree-arcade-game/]. 
+The easiest way to play is by going to the pushed [website](abustamam.github.io/frontend-nanodegree-arcade-game/). 
 
 If you'd like to make changes to the game (for example, adding your own levels), download the repo and use something like SimpleHTTPServer on Python.
 
