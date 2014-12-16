@@ -65,16 +65,10 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
-        reset();
         lastTime = Date.now();
-        $(".start").click(function () {
-            $("#start-game").css('display', 'none');
-            $("#game-over").css('display', 'none');
-            $("#stats").css("display", 'block');
-            $("#game-area").css("display", 'block');
-            game.resetGame();
-            main();
-        });
+        $("#game-area").css("display", 'block');
+        game.resetGame();
+        main();
     }
 
     /* This function is called by main (our game loop) and itself calls all
@@ -88,10 +82,6 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-    
-        // Display status text
-        $("#lives").text(game.lives);
-        $("#level").text(game.lvl + 1);
     }
 
     /* This is called by the update function  and loops through all of the
@@ -108,10 +98,6 @@ var Engine = (function(global) {
             });
             game.player.update();
         }
-
-        else if (game.state === "start") {
-            game.selector.update();
-        }
     }
 
     /* This function initially draws the "game level", it will then call
@@ -121,7 +107,14 @@ var Engine = (function(global) {
      * they are just drawing the entire screen over and over.
      */
     function render() {
-        if (game.state === "game"){
+        // Draw background rectangle
+        ctx.beginPath();
+        ctx.rect(0, 0, 505, 606);
+        ctx.fillStyle = 'white';
+        ctx.fill();
+
+        switch(game.state){
+        case "game":
             game.levels[game.lvl].render();
 
             /* Loop through all of the objects within the level.enemies array and call
@@ -131,20 +124,20 @@ var Engine = (function(global) {
                 enemy.render();
             });
 
+            // Render player
+
             game.player.render();
-        }
 
-        else if (game.state === "start") {
+            // Render status text
 
-            // Draw background rectangle
-            ctx.beginPath();
-            ctx.rect(0, 0, 505, 606);
-            ctx.fillStyle = 'white';
-            ctx.fill();
-            ctx.lineWidth = 1;
-            ctx.strokeStyle = 'black';
-            ctx.stroke();
-
+            ctx.font = "bold 20pt Calibri";
+            ctx.textAlign = "center";
+            ctx.fillStyle = 'black';
+            ctx.fillText("Lives: " + game.lives, 125, 37);
+            ctx.fillText("Level: " + game.lvl + 1, 375, 37);
+            break;
+            
+        case "start":
             // Draw Selector
             game.selector.render();
 
@@ -154,16 +147,39 @@ var Engine = (function(global) {
             for (i = 0; i < chr.length; i++) {
                 ctx.drawImage(Resources.get(chr[i]['sprite']), i * 101 + 50, 3 * 83 - 20);
             }
+
+            // Draw text
+
+            ctx.font = 'bold 20pt Calibri';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = "black";
+            ctx.fillText('Select Your Heroine!', 252, 100);
+            ctx.font = 'bold 14pt Calibri';
+            ctx.fillText('Press Space or Enter to Begin', 252, 160);
+            break;
+
+        case "win":
+            ctx.drawImage(Resources.get(game.player.sprite), 101+50, 3 * 83 - 20);
+            ctx.drawImage(Resources.get('images/char-boy.png'), 202+50, 3 * 83 - 20);
+            ctx.drawImage(Resources.get('images/Heart.png'), 151+50, 3 * 83 - 20);
+
+            ctx.font = 'bold 20pt Calibri';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = "black";
+            ctx.fillText('You Win!', 252, 100);
+            break;
+
+        case "over":
+            ctx.font = 'bold 20pt Calibri';
+            ctx.textAlign = 'center';
+            ctx.fillStyle = "black";
+            ctx.fillText('Game Over!', 252, 100);
+            ctx.font = 'bold 14pt Calibri';
+            ctx.fillText('Press Space or Enter to Restart', 252, 160);
+            break;
         }
     }
 
-    /* This function does nothing but it could have been a good place to
-     * handle game reset states - maybe a new game menu or a game over screen
-     * those sorts of things. It's only called once by the init() method.
-     */
-    function reset() {
-        // noop
-    }
 
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when
@@ -180,7 +196,8 @@ var Engine = (function(global) {
         'images/char-pink-girl.png',
         'images/char-princess-girl.png',
         'images/enemy-bug-flipped.png',
-        'images/Selector.png'
+        'images/Selector.png',
+        'images/Heart.png'
     ]);
     Resources.onReady(init);
 

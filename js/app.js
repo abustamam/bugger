@@ -28,21 +28,21 @@ var Game = function() {
     this.lvl = 0;
 
     // Initialize levels
-    var level1 = new Level(1, [4],
+    var level1 = new Level([4],
                               ["wgggw",
                                "sssss",
                                "sssss",
                                "sssss",
                                "sssss",
                                "ggggg"]);
-    var level2 = new Level(2, [3,2],
+    var level2 = new Level([3,2],
                               ["wgggw",
                                "sssss",
                                "sssss",
                                "sssss",
                                "sssss",
                                "ggggg"]);
-    var level3 = new Level(3, [1,2,3],
+    var level3 = new Level([1,2,3],
                               ["wgggw",
                                "sssss",
                                "sssss",
@@ -59,12 +59,15 @@ var Game = function() {
 Game.prototype.reset = function() {
     this.player.x = 2;
     this.player.y = 5;
-    this.lives--;
+};
 
-    if (this.lives === 0) {
-        $("#stats").css("display", 'none');
-        $("#game-area").css("display", 'none');
-        $("#game-over").css('display', 'block');
+Game.prototype.die = function() {
+    if (this.lives < 1) {
+        this.gameOver();
+    }
+    else {
+        this.reset();
+        this.lives--;
     }
 };
 
@@ -73,12 +76,24 @@ Game.prototype.resetGame = function() {
 }
 
 Game.prototype.gameOver = function() {
-    
+    $("#stats").css("display", 'none');
+    $("#game-area").css("display", 'none');
+    $("#game-over").css('display', 'block');
+};
+
+Game.prototype.nextLevel = function() {
+    if (this.lvl < 2) {
+        this.reset();
+        this.lvl += 1;
+    }
+    else {
+        game.state = "win";
+    }
 };
 
 // Level class
 
-var Level = function(num, loc, map) {
+var Level = function(loc, map) {
     // The Level class will contain information about the level, namely the 
     // tiles used, number of enemies, size, items, etc...
 
@@ -97,8 +112,8 @@ var Level = function(num, loc, map) {
 
     var en;
 
-    while (i < num) {
-        en = new Enemy(0,loc);
+    while (i < loc.length) {
+        en = new Enemy(0,loc[i]);
         this.enemies.push(en);
         i++;
     }
@@ -176,7 +191,7 @@ Enemy.prototype.update = function(dt) {
           this.x + 1 < game.player.x  ||
           this.y >= game.player.y + 1 ||
           this.y < game.player.y)) {
-        game.reset();
+        game.die();
     }
 
 }
@@ -203,7 +218,13 @@ Player.prototype.update = function(dt) {
 
     if (game.levels[game.lvl].map[this.y][this.x] === "w"){
         // Drowning 
-        game.reset();
+        game.die();
+    }
+
+    // Check if player reached the prince
+
+    if (this.x === 2 && this.y === 0) {
+        game.nextLevel();
     }
 }
 
@@ -271,14 +292,11 @@ Selector.prototype.handleInput = function(key) {
         }
         break;
     case 'space':
+    case 'enter':
         game.player.sprite = this.characters[this.position]['sprite'];
         game.state = "game";
         break;
     }
-};
-
-Selector.prototype.update = function() {
-    
 };
 
 // Now instantiate your objects.
