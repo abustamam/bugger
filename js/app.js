@@ -21,7 +21,7 @@ var Game = function() {
     // It is also the way by which everything is initialized upon start, and upon
     // reset (game over).
 
-    this.state = "start";
+    this.state = 'start';
 
     this.lives = 3;
 
@@ -29,32 +29,32 @@ var Game = function() {
 
     // Initialize levels
     var level1 = new Level([4],
-                              ["wgggw",
-                               "sssss",
-                               "sssss",
-                               "sssss",
-                               "sssss",
-                               "ggggg"]);
+                              ['wgggw',
+                               'sssss',
+                               'sssss',
+                               'sssss',
+                               'sssss',
+                               'ggggg']);
     var level2 = new Level([3,2],
-                              ["wgggw",
-                               "sssss",
-                               "sssss",
-                               "sssss",
-                               "sssss",
-                               "ggggg"]);
+                              ['wgggw',
+                               'sssss',
+                               'sssss',
+                               'sssss',
+                               'sssss',
+                               'ggggg']);
     var level3 = new Level([1,2,3],
-                              ["wgggw",
-                               "sssss",
-                               "sssss",
-                               "sssss",
-                               "sssss",
-                               "ggggg"]);
+                              ['wgggw',
+                               'sssss',
+                               'sssss',
+                               'sssss',
+                               'sssss',
+                               'ggggg']);
     this.levels = [level1,level2,level3];
 
     this.player = new Player(2,5);
 
     this.selector = new Selector();
-}
+};
 
 Game.prototype.reset = function() {
     this.player.x = 2;
@@ -76,7 +76,7 @@ Game.prototype.resetGame = function() {
 }
 
 Game.prototype.gameOver = function() {
-    this.state = "over";
+    this.state = 'over';
 };
 
 Game.prototype.nextLevel = function() {
@@ -85,14 +85,14 @@ Game.prototype.nextLevel = function() {
         this.lvl += 1;
     }
     else {
-        game.state = "win";
+        game.state = 'win';
     }
 };
 
 Game.prototype.handleInput = function(key) {
     switch(key){
-    case "space":
-    case "enter":
+    case 'space':
+    case 'enter':
         this.resetGame();
     }
 };
@@ -123,7 +123,7 @@ var Level = function(loc, map) {
         this.enemies.push(en);
         i++;
     }
-}
+};
 
 Level.prototype.render = function(map) {
         var rowImages = this.map,
@@ -133,7 +133,7 @@ Level.prototype.render = function(map) {
 
         /* Loop through the number of rows and columns we've defined above
          * and, using the rowImages array, draw the correct image for that
-         * portion of the "grid"
+         * portion of the 'grid'
          */
         for (row = 0; row < numRows; row++) {
             for (col = 0; col < numCols; col++) {
@@ -144,21 +144,21 @@ Level.prototype.render = function(map) {
                  * so that we get the benefits of caching these images, since
                  * we're using them over and over.
                  */
-                if (rowImages[row][col] === "w") {
-                    img = "images/water-block.png";
-                } else if (rowImages[row][col] === "s") {
-                    img = "images/stone-block.png";
-                } else if (rowImages[row][col] === "g") {
-                    img = "images/grass-block.png";
+                if (rowImages[row][col] === 'w') {
+                    img = 'images/water-block.png';
+                } else if (rowImages[row][col] === 's') {
+                    img = 'images/stone-block.png';
+                } else if (rowImages[row][col] === 'g') {
+                    img = 'images/grass-block.png';
                 }
                 ctx.drawImage(Resources.get(img), col * 101, row * 83);
             }
         }
 
         // Draw the dude in distress and his attackers! 
-        ctx.drawImage(Resources.get("images/enemy-bug.png"), 1 * 101, 0 * 83 - 20);
-        ctx.drawImage(Resources.get("images/char-boy.png"), 2 * 101, 0 * 83 - 20);
-        ctx.drawImage(Resources.get("images/enemy-bug-flipped.png"), 3 * 101, 0 * 83 - 20);
+        ctx.drawImage(Resources.get('images/enemy-bug.png'), 1 * 101, 0 * 83 - 20);
+        ctx.drawImage(Resources.get('images/char-boy.png'), 2 * 101, 0 * 83 - 20);
+        ctx.drawImage(Resources.get('images/enemy-bug-flipped.png'), 3 * 101, 0 * 83 - 20);
 };
 
 // Enemies our player must avoid
@@ -176,7 +176,7 @@ var Enemy = function(x,y) {
     // Utilize grid coords
     this.x = x;
     this.y = y;
-}
+};
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -200,12 +200,12 @@ Enemy.prototype.update = function(dt) {
         game.die();
     }
 
-}
+};
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83 - 20);
-}
+};
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -215,14 +215,14 @@ var Player = function(x,y) {
     this.sprite = 'images/char-horn-girl.png';
     this.x = x;
     this.y = y;
-}
+};
 
 Player.prototype.update = function(dt) {
     // Check if player is drowning. It's important to note that 
     // the map property of a level is row by column, not column by row,
     // so coordinates are (y, x)
 
-    if (game.levels[game.lvl].map[this.y][this.x] === "w"){
+    if (game.levels[game.lvl].map[this.y][this.x] === 'w'){
         // Drowning 
         game.die();
     }
@@ -232,11 +232,11 @@ Player.prototype.update = function(dt) {
     if (this.x === 2 && this.y === 0) {
         game.nextLevel();
     }
-}
+};
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x * 101, this.y * 83 - 20);
-}
+};
 
 Player.prototype.handleInput = function(key){
     switch(key) {
@@ -265,19 +265,19 @@ Player.prototype.handleInput = function(key){
         }
         break;
     }
-}
+};
 
 var Selector = function() {
     this.sprite = 'images/Selector.png';
     this.position = 0;
     this.characters = [
-        {name: "cat-girl", sprite: "images/char-cat-girl.png"},
-        {name: "horn-girl", sprite: "images/char-horn-girl.png"},
-        {name: "pink-girl", sprite: "images/char-pink-girl.png"},
-        {name: "princess-girl", sprite: "images/char-princess-girl.png"}
+        {name: 'cat-girl', sprite: 'images/char-cat-girl.png'},
+        {name: 'horn-girl', sprite: 'images/char-horn-girl.png'},
+        {name: 'pink-girl', sprite: 'images/char-pink-girl.png'},
+        {name: 'princess-girl', sprite: 'images/char-princess-girl.png'}
     ];
     this.y = 3;
-}
+};
 
 Selector.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.position * 101 + 50, this.y * 83 - 20);
@@ -300,7 +300,7 @@ Selector.prototype.handleInput = function(key) {
     case 'space':
     case 'enter':
         game.player.sprite = this.characters[this.position]['sprite'];
-        game.state = "game";
+        game.state = 'game';
         break;
     }
 };
@@ -325,14 +325,14 @@ document.addEventListener('keyup', function(e) {
         13: 'enter'
     };
 
-    if (game.state === "start") {
+    if (game.state === 'start') {
         game.selector.handleInput(allowedKeys[e.keyCode]);
     }
-    else if (game.state === "game") {
+    else if (game.state === 'game') {
         game.player.handleInput(allowedKeys[e.keyCode]);
     }
 
-    else if (game.state === "win" || game.state === "over") {
+    else if (game.state === 'win' || game.state === 'over') {
         game.handleInput(allowedKeys[e.keyCode]);
     }
 
